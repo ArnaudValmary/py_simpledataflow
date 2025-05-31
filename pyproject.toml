@@ -1,5 +1,5 @@
 [project]
-name = "pydataflow"
+name = "simpledataflow"
 version = "0.1.0"
 description = "A simple Python library for processing data through a stream"
 authors = [{name = "Arnaud Valmary"}]
@@ -14,7 +14,7 @@ build-backend = "poetry.core.masonry.api"
 package-mode = true
 repository = "https://github.com/ArnaudValmary/py_dictflat"
 packages = [
-    { include = "pydataflow", from = "src" },
+    { include = "simpledataflow", from = "src" },
 ]
 
 [tool.poetry.requires-plugins]

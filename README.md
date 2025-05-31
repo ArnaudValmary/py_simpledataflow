@@ -1,4 +1,4 @@
-# pydataflow
+# simpledataflow
 
 A simple Pyhton library for processing stream data using a logical sequence of functions
 
@@ -9,7 +9,7 @@ Transform, select, remove... data from a generator by a sequence of functions.
 ## Installation
 
 ```bash
-poetry add pydataflow
+poetry add simpledataflow
 ```
 
 ## Quick start
