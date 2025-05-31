@@ -1,7 +1,7 @@
 import os
 from typing import Any, Dict, Generator, Union
 
-from simpledataflow.flow import Flow, FlowSkipData
+from pysimpledataflow.flow import Flow, FlowSkipData
 
 
 #
