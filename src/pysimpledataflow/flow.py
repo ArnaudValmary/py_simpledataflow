@@ -5,7 +5,7 @@ from typing import Any, Callable, Dict, Final, Generator, List, Optional, Tuple,
 
 from .tools_inspect import get_fct_parameter_names
 
-logger: logging.Logger = logging.getLogger('Flow')
+logger: logging.Logger = logging.getLogger('PySimpleDataFlow')
 
 final:     Final[bool] = True
 not_final: Final[bool] = False
@@ -115,10 +115,10 @@ class Flow:
         """
 
         if arg_value is not None and isinstance(arg_value, int) and arg_value <= 0:
-            logger.error("Flow: %s value is invalid integer: %d <= 0" % (comment, arg_value))
+            logger.error("PySimpleDataFlow: %s value is invalid integer: %d <= 0" % (comment, arg_value))
             arg_value = None
         if arg_value is not None and isinstance(arg_value, str) and not arg_value.startswith(self.context_prefix):
-            logger.error("Flow: %s value is invalid str: '%s' doesn't starts by '%s'" % (comment, arg_value, self.context_prefix))
+            logger.error("PySimpleDataFlow: %s value is invalid str: '%s' doesn't starts by '%s'" % (comment, arg_value, self.context_prefix))
             arg_value = None
         return arg_value
 
@@ -268,7 +268,7 @@ class Flow:
         if self.functions_modulo:
             for modulo_n in self.functions_modulo:
                 if modulo_n <= 0:
-                    logger.error("Flow: modulo value is invalid integer: %d <= 0" % modulo_n)
+                    logger.error("PySimpleDataFlow: modulo value is invalid integer: %d <= 0" % modulo_n)
                 else:
                     modulos_fct: Union[Callable, List[Callable]] = self.functions_modulo[modulo_n]
                     if modulos_fct and not isinstance(modulos_fct, list):
@@ -307,16 +307,16 @@ class Flow:
                     if value is not None:
                         if isinstance(value, int):
                             if value <= 0:
-                                logger.error("Flow: %s value is invalid integer: %d <= 0" % (comment, value))
+                                logger.error("PySimpleDataFlow: %s value is invalid integer: %d <= 0" % (comment, value))
                                 value = None
                         else:
-                            logger.error("Flow: %s value is not an integer: %s" % (comment, value))
+                            logger.error("PySimpleDataFlow: %s value is not an integer: %s" % (comment, value))
                             value = None
                 else:
-                    logger.error("Flow: %s value field name '%s' not in context" % (comment, value))
+                    logger.error("PySimpleDataFlow: %s value field name '%s' not in context" % (comment, value))
                     value = None
             else:
-                logger.error("Flow: %s value is invalid str: '%s' doesn't starts by '%s'" % (comment, value, self.context_prefix))
+                logger.error("PySimpleDataFlow: %s value is invalid str: '%s' doesn't starts by '%s'" % (comment, value, self.context_prefix))
                 value = None
         return value
 
@@ -348,10 +348,10 @@ class Flow:
             int: The final index.
         """
 
-        logger.debug("Flow: Init starts")
+        logger.debug("PySimpleDataFlow: Init starts")
 
         if self.functions_init is None:
-            logger.debug("Flow: No init functions")
+            logger.debug("PySimpleDataFlow: No init functions")
         else:
             for fct in self.functions_init:
                 fct_idx += 1
@@ -362,7 +362,7 @@ class Flow:
 
         self.__init_vars()
 
-        logger.debug("Flow: Init ends")
+        logger.debug("PySimpleDataFlow: Init ends")
 
         return fct_idx
 
@@ -378,7 +378,7 @@ class Flow:
             Tuple[int, Optional[Generator]]: The final index and a generator of filtered data.
         """
 
-        logger.debug("Flow: Call data generator")
+        logger.debug("PySimpleDataFlow: Call data generator")
 
         fct: Optional[Callable] = self.function_load
         all_data: Optional[Generator] = None
@@ -390,7 +390,7 @@ class Flow:
             else:
                 all_data = fct()
 
-        logger.debug("Flow: End of call generator")
+        logger.debug("PySimpleDataFlow: End of call generator")
 
         return fct_idx, all_data
 
@@ -415,15 +415,15 @@ class Flow:
         Applies all finalyze functions.
         """
 
-        logger.debug("Flow: Finalyze starts")
+        logger.debug("PySimpleDataFlow: Finalyze starts")
 
         if self.functions_finalyze is None:
-            logger.debug("Flow: No finalyze functions")
+            logger.debug("PySimpleDataFlow: No finalyze functions")
         else:
             for idx_fct, fct in enumerate(self.functions_finalyze, start=self.flow_functions_final_start):
                 self.__apply_finalyze_fct(idx_fct, fct)
 
-        logger.debug("Flow: Finalyze ends")
+        logger.debug("PySimpleDataFlow: Finalyze ends")
 
     def __log_modulo(self,
                      flag_final: bool = not_final) -> None:
@@ -438,14 +438,14 @@ class Flow:
         """
 
         if self.size_of_set is None:
-            logger.debug(
-                "Flow: #data%s = %d" % (
+            logger.info(
+                "PySimpleDataFlow: #data%s = %d" % (
                     ' (final)' if flag_final else '',
                     self.nb_data_total)
             )
         else:
-            logger.debug(
-                "Flow: #data%s = %d/%d (%3.2f%%)" % (
+            logger.info(
+                "PySimpleDataFlow: #data%s = %d/%d (%3.2f%%)" % (
                     ' (final)' if flag_final else '',
                     self.nb_data_total,
                     self.size_of_set,
@@ -502,7 +502,7 @@ class Flow:
             Tuple[int, int, int, int]: The total count, processed count, skipped count, and stopped by None count.
         """
 
-        logger.debug("Flow: Apply filters")
+        logger.debug("PySimpleDataFlow: Apply filters")
 
         if self.functions_filter is not None:
             self.nb_filters: int = len(self.functions_filter)
@@ -529,7 +529,7 @@ class Flow:
             if self.log_modulo:
                 self.__log_modulo(final)
 
-        logger.debug("Flow: End of filters")
+        logger.debug("PySimpleDataFlow: End of filters")
 
         return self.nb_data_total, self.nb_data_processed, self.nb_data_skip, self.nb_data_stopped_with_none
 
@@ -548,10 +548,10 @@ class Flow:
         fct_idx: int = self.__init_flow()
 
         if self.function_load is None:
-            logger.warning("Flow: No load function")
+            logger.info("PySimpleDataFlow: No load function")
         else:
             if self.functions_filter is None:
-                logger.warning("Flow: No filter functions")
+                logger.info("PySimpleDataFlow: No filter functions")
             else:
                 all_data: Optional[Generator] = None
                 fct_idx, all_data = self.__load_data(fct_idx)

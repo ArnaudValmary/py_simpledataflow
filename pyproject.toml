@@ -1,6 +1,6 @@
 [project]
 name = "py_simpledataflow"
-version = "0.1.0"
+version = "0.1.1"
 description = "A simple Python library for processing data through a stream"
 authors = [{name = "Arnaud Valmary"}]
 readme = "README.md"
