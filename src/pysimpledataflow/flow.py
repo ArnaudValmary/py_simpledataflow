@@ -3,7 +3,7 @@
 import logging
 from typing import Any, Callable, Dict, Final, Generator, List, Optional, Tuple, Union
 
-from .tools_inspect import get_fct_parameter_names
+from pyoverinspect.overinspect import get_fct_parameter_names
 
 logger: logging.Logger = logging.getLogger('PySimpleDataFlow')
 
