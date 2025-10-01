@@ -227,9 +227,10 @@ class Flow:
 
         if self.functions_filter:
             index: int = 0
+            new_data = data
             for index, fct in enumerate(self.functions_filter, start=1):
                 fct_idx_tmp += 1
-                new_data: Any = self.__apply_filter_fct(data, fct_idx_tmp, fct)
+                new_data: Any = self.__apply_filter_fct(new_data, fct_idx_tmp, fct)
                 if (new_data is None
                         and not self.continue_if_none
                         and
